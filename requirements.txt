@@ -1,1 +1,3 @@
 pymongo==2.1
+PrettyTable
+psutil==0.3.0
