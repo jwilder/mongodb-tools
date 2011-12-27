@@ -78,7 +78,7 @@ for db in all_db_stats:
     count = 0
     for stat in db_stats:
         count += stat["count"]
-        x.add_row([stat["ns"], count, "%0.1f%%" % ((stat["size"] / float(summary_stats["size"])) * 100),
+        x.add_row([stat["ns"], stat["count"], "%0.1f%%" % ((stat["size"] / float(summary_stats["size"])) * 100),
                    convert_bytes(stat["size"]),
                    convert_bytes(stat.get("avgObjSize", 0)),
                    stat.get("nindexes", 0),
