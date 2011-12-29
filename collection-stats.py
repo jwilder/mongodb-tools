@@ -6,8 +6,9 @@ collections and their indexes.
 from prettytable import PrettyTable
 import psutil
 from pymongo import Connection
+from pymongo import ReadPreference
 
-connection = Connection()
+connection = Connection(read_preference=ReadPreference.SECONDARY)
 
 def compute_signature(index):
     signature = index["ns"]
