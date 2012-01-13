@@ -81,7 +81,7 @@ for db in all_db_stats:
 	for index in stat["indexSizes"]:
             index_size = stat["indexSizes"].get(index, 0)
             row = [stat["ns"], index,
-                      "%0.1f%%" % ((index_size / float(stat["totalIndexSize"])) * 100),
+                      "%0.1f%%" % ((index_size / float(summary_stats["indexSize"])) * 100),
 		      convert_bytes(index_size)]
             index_size_mapping[index_size] = row
             x.add_row(row)
