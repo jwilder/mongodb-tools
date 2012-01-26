@@ -11,7 +11,7 @@
     ./setup.sh
     source virtualenv/bin/activate
 
-## Test D
+## Test Data Setup
 
     In on terminal run:
 
