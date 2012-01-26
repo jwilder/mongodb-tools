@@ -10,5 +10,6 @@ virtualenv --no-site-packages virtualenv
 source virtualenv/bin/activate
 pip install -r requirements.txt
 
+export PYTHONPATH=.:$PYTHONPATH
 echo "Run \"source virtualenv/bin/activate\" to activate this virtualenv."
 

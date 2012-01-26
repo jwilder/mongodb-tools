@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 This script prints some basic collection stats about the size of the
 collections and their indexes.

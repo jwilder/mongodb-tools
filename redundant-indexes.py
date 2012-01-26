@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 This is a simple script to print out potentially redundant indexes in a mongdb instance.
 For example, if an index is defined on {field1:1,field2:1} and there is another index
