@@ -13,7 +13,7 @@ connection = Connection()
 def compute_signature(index):
     signature = index["ns"]
     for key in index["key"]:
-        signature += "%s_%s" % (key, index["key"][key])
+        signature += "%s_%s" % (key, int(index["key"][key]))
     return signature
 
 def report_redundant_indexes(current_db):
