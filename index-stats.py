@@ -113,5 +113,4 @@ print "Total Index Size:", convert_bytes(summary_stats["indexSize"])
 
 ram_headroom = psutil.phymem_usage()[0] - summary_stats["indexSize"]
 print "RAM Headroom:", convert_bytes(ram_headroom)
-print "RAM Used: %s (%s%%)" % (convert_bytes(psutil.phymem_usage()[1]), psutil.phymem_usage()[3])
 print "Available RAM Headroom:", convert_bytes((100 - psutil.phymem_usage()[3]) / 100 * ram_headroom)
