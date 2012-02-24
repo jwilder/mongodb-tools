@@ -11,8 +11,7 @@ def bson_iter(bson_file):
     doc in the file.  This will not load all docs into memory.
 
     with open('User.bson', 'rb') as bs:
-        file_map = mmap.mmap(bs.fileno(), 0, prot=mmap.PROT_READ)
-        active_users = filter(bson_iter(file_map), "type", "active")
+        active_users = filter(bson_iter(bs), "type", "active")
 
     """
     while True:
@@ -24,7 +23,7 @@ def bson_iter(bson_file):
         obj = bson_file.read(obj_size - 4)
         if obj[-1] != "\x00":
             raise InvalidBSON("bad eoo")
-        yield bson._elements_to_dict(obj[:-1], dict, True)
+        yield bson._bson_to_dict(size_str + obj, dict, True)[0]
 
 def groupby(iterator, field):
     """
