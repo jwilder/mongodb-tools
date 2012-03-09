@@ -2,3 +2,6 @@
 *.pyc
 distribute-0.6.10.tar.gz
 virtualenv
+build
+dist
+mongodbtools.egg-info

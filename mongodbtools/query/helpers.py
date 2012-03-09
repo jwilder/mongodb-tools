@@ -25,6 +25,23 @@ def bson_iter(bson_file):
             raise InvalidBSON("bad eoo")
         yield bson._bson_to_dict(size_str + obj, dict, True)[0]
 
+def _deep_get(obj, field):
+    parts = field.split(".")
+    if len(parts) == 1:
+        return obj.get(field)
+
+    last_value = {}
+    for part in parts[0:-1]:
+        last_value  = obj.get(part)
+
+    if not last_value:
+        return False
+
+    if isinstance(last_value, dict):
+        return last_value.get(parts[-1])
+    else:
+        return getattr(last_value, parts[-1])
+
 def groupby(iterator, field):
     """
     Returns dictionary with the keys beign the field to group by
@@ -34,8 +51,10 @@ def groupby(iterator, field):
     for example.
     """
     groups = {}
-    for k, g in itertools.groupby(iterator, lambda x: x.get(field)):
-        groups.setdefault(k, []).append(g)
+    for k, g in itertools.groupby(iterator, lambda x: _deep_get(x, field)):
+        items = groups.setdefault(k, [])
+        for item in g:
+            items.append(item)
     return groups
 
 def filter(iterator, field, value):
@@ -45,18 +64,5 @@ def filter(iterator, field, value):
     The field can be a nested field like a.b.c and it will descend into the
     embedded documents.
     """
-    def deep_get(obj, field, value):
-        parts = field.split(".")
-        if len(parts) == 1:
-            return obj.get(field) == value
 
-        last_value = {}
-        for part in parts[0:-1]:
-            last_value  = obj.get(part)
-
-        if not last_value:
-            return False
-
-        return last_value.get(parts[-1]) == value
-
-    return itertools.ifilter(lambda x: deep_get(x, field, value), iterator)
+    return itertools.ifilter(lambda x: _deep_get(x, field) == value, iterator)
