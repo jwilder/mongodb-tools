@@ -81,7 +81,7 @@ def main():
         count = 0
         for stat in db_stats:
             count += stat["count"]
-        for index in stat["indexSizes"]:
+            for index in stat["indexSizes"]:
                 index_size = stat["indexSizes"].get(index, 0)
                 row = [stat["ns"], index,
                           "%0.1f%%" % ((index_size / float(summary_stats["indexSize"])) * 100),
