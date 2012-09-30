@@ -7,9 +7,39 @@ with just fields {field1:1}, the latter index is not needed since the first inde
 indexes the necessary fields.
 """
 from pymongo import Connection
+from pymongo import ReadPreference
+from optparse import OptionParser
 
-def main():
-    connection = Connection()
+
+def get_cli_options():
+    parser = OptionParser(usage="usage: python %prog [options]",
+                          description="""This script prints some basic collection stats about the size of the collections and their indexes.""")
+
+    parser.add_option("-H", "--host",
+                      dest="host",
+                      default="localhost",
+                      metavar="HOST",
+                      help="MongoDB host")
+    parser.add_option("-p", "--port",
+                      dest="port",
+                      default=27017,
+                      metavar="PORT",
+                      help="MongoDB port")
+    parser.add_option("-d", "--database",
+                      dest="database",
+                      default="",
+                      metavar="DATABASE",
+                      help="Target database to generate statistics. All if omitted.")
+
+    (options, args) = parser.parse_args()
+        
+    return options
+
+def get_connection(host, port): 
+    return Connection(host, port, read_preference=ReadPreference.SECONDARY)
+
+def main(options):
+    connection = get_connection(options.host, options.port)
 
     def compute_signature(index):
         signature = index["ns"]
@@ -38,9 +68,15 @@ def main():
                         index_map[signature]["name"],
                         index_map[other_sig]["ns"],
                         index_map[other_sig]["name"])
-
-    for db in connection.database_names():
+    
+    if options.database: 
+        databases.append(options.database)
+    else:
+        databases = connection.database_names()
+        
+    for db in databases:
         report_redundant_indexes(connection[db])
 
 if __name__ == "__main__":
-    main()
+    options = get_cli_options()
+    main(options)

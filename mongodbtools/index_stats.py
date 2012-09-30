@@ -9,8 +9,7 @@ from prettytable import PrettyTable
 import psutil
 from pymongo import Connection
 from pymongo import ReadPreference
-
-connection = Connection(read_preference=ReadPreference.SECONDARY)
+from optparse import OptionParser
 
 def compute_signature(index):
     signature = index["ns"]
@@ -41,16 +40,53 @@ def convert_bytes(bytes):
         size = '%.2fb' % bytes
     return size
 
-def main():
+def get_cli_options():
+    parser = OptionParser(usage="usage: python %prog [options]",
+                          description="""This script prints some basic collection stats about the size of the collections and their indexes.""")
+
+    parser.add_option("-H", "--host",
+                      dest="host",
+                      default="localhost",
+                      metavar="HOST",
+                      help="MongoDB host")
+    parser.add_option("-p", "--port",
+                      dest="port",
+                      default=27017,
+                      metavar="PORT",
+                      help="MongoDB port")
+    parser.add_option("-d", "--database",
+                      dest="database",
+                      default="",
+                      metavar="DATABASE",
+                      help="Target database to generate statistics. All if omitted.")
+
+    (options, args) = parser.parse_args()
+        
+    return options
+
+def get_connection(host, port): 
+    return Connection(host, port, read_preference=ReadPreference.SECONDARY)
+
+def main(options):
     summary_stats = {
         "count" : 0,
         "size" : 0,
         "indexSize" : 0
     }
     all_stats = []
+    
+    connection = get_connection(options.host, options.port)
 
     all_db_stats = {}
-    for db in connection.database_names():
+    
+    databases = []
+    
+    if options.database: 
+        databases.append(options.database)
+    else:
+        databases = connection.database_names()
+    
+    for db in databases:
         # FIXME: Add an option to include oplog stats.
         if db == "local":
             continue
@@ -112,9 +148,13 @@ def main():
     print "Total Data Size:", convert_bytes(summary_stats["size"])
     print "Total Index Size:", convert_bytes(summary_stats["indexSize"])
 
-    ram_headroom = psutil.phymem_usage()[0] - summary_stats["indexSize"]
-    print "RAM Headroom:", convert_bytes(ram_headroom)
-    print "Available RAM Headroom:", convert_bytes((100 - psutil.phymem_usage()[3]) / 100 * ram_headroom)
+    # this is only meaningful if we're running the script on localhost
+    if options.host == "localhost":
+        ram_headroom = psutil.phymem_usage()[0] - summary_stats["indexSize"]
+        print "RAM Headroom:", convert_bytes(ram_headroom)
+        print "RAM Used: %s (%s%%)" % (convert_bytes(psutil.phymem_usage()[1]), psutil.phymem_usage()[3])
+        print "Available RAM Headroom:", convert_bytes((100 - psutil.phymem_usage()[3]) / 100 * ram_headroom)
 
 if __name__ == "__main__":
-    main()
+    options = get_cli_options()
+    main(options)
