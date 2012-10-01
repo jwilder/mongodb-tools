@@ -61,10 +61,10 @@ def get_cli_options():
                       help="Target database to generate statistics. All if omitted.")
 
     (options, args) = parser.parse_args()
-        
+
     return options
 
-def get_connection(host, port): 
+def get_connection(host, port):
     return Connection(host, port, read_preference=ReadPreference.SECONDARY)
 
 def main(options):
@@ -74,18 +74,17 @@ def main(options):
         "indexSize" : 0
     }
     all_stats = []
-    
+
     connection = get_connection(options.host, options.port)
 
     all_db_stats = {}
-    
+
     databases = []
-    
-    if options.database: 
+    if options.database:
         databases.append(options.database)
     else:
         databases = connection.database_names()
-    
+
     for db in databases:
         # FIXME: Add an option to include oplog stats.
         if db == "local":

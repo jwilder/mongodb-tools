@@ -32,10 +32,10 @@ def get_cli_options():
                       help="Target database to generate statistics. All if omitted.")
 
     (options, args) = parser.parse_args()
-        
+
     return options
 
-def get_connection(host, port): 
+def get_connection(host, port):
     return Connection(host, port, read_preference=ReadPreference.SECONDARY)
 
 def main(options):
@@ -68,12 +68,13 @@ def main(options):
                         index_map[signature]["name"],
                         index_map[other_sig]["ns"],
                         index_map[other_sig]["name"])
-    
-    if options.database: 
+
+    databases= []
+    if options.database:
         databases.append(options.database)
     else:
         databases = connection.database_names()
-        
+
     for db in databases:
         report_redundant_indexes(connection[db])
 
