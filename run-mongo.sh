@@ -5,5 +5,7 @@ if [ "MONGODB_INSTALLED" == "" ]; then
     exit 1
 fi
 
+${PORT:=27017}
+
 mkdir -p ./.data
-mongod --dbpath ./.data
+mongod --dbpath ./.data --port $PORT
