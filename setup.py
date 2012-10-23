@@ -19,11 +19,14 @@ setup(
     collection-stats=mongodbtools.collection_stats:main
     index-stats=mongodbtools.index_stats:main
     redundant-indexes=mongodbtools.redundant_indexes:main
+    mongo-sniff=mongodbtools.mongo_sniff:main
     """,
     install_requires=[
-        'pymongo>=2.1',
-        'PrettyTable',
+        'pymongo>=2.3',
+        'PrettyTable==0.5.0',
         'psutil==0.3.0',
-        'mongoengine==0.5.0'
+        'mongoengine==0.6.0',
+        'colorama==0.2.4',
+        'pcapy==0.10.5'
     ],
 )

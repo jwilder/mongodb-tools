@@ -3,6 +3,8 @@
 * collection-stats.py - Display statistics about the collections in all databases
 * index-stats.py - Displays statistics about the indexes in all databases
 * redudant-indexes.py - Finds indexes that may redundant
+* mongo-sniff.py - PCAP based MongoDB query sniffer.  Dumps MongoDB wire protocol
+                   packets as equivalent JS console commands.
 
 ## Installation
 
@@ -57,7 +59,7 @@
 ## index-stats.py
 
     $ ./index-stats.py
-    
+
 
     Checking DB: examples2.system.indexes
     Checking DB: examples2.things
