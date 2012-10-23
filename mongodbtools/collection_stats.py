@@ -67,7 +67,8 @@ def convert_bytes(bytes):
         size = '%.2fb' % bytes
     return size
 
-def main(options):
+def main():
+    options = get_cli_options()
     summary_stats = {
         "count" : 0,
         "size" : 0,
@@ -137,5 +138,5 @@ def main(options):
         print "Available RAM Headroom:", convert_bytes((100 - psutil.phymem_usage()[3]) / 100 * ram_headroom)
 
 if __name__ == "__main__":
-    options = get_cli_options()
-    main(options)
+
+    main()

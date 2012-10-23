@@ -38,7 +38,8 @@ def get_cli_options():
 def get_connection(host, port):
     return Connection(host, port, read_preference=ReadPreference.SECONDARY)
 
-def main(options):
+def main():
+    options = get_cli_options()
     connection = get_connection(options.host, options.port)
 
     def compute_signature(index):
@@ -79,5 +80,4 @@ def main(options):
         report_redundant_indexes(connection[db])
 
 if __name__ == "__main__":
-    options = get_cli_options()
-    main(options)
+    main()
