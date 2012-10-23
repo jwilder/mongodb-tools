@@ -27,6 +27,7 @@ setup(
         'psutil==0.3.0',
         'mongoengine==0.6.0',
         'colorama==0.2.4',
-        'pcapy==0.10.5'
+        'pcapy==0.10.5',
+        'impacket==0.9.6.0'
     ],
 )

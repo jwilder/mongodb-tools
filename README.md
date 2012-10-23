@@ -8,6 +8,16 @@
 
 ## Installation
 
+    # Install libpcap-dev (On Ubuntu)
+    sudo apt-get install libpcap-dev
+
+    pip install git+git://github.com/jwilder/mongodb-tools.git
+
+
+## Installation for development
+    # Install libpcap-dev (On Ubuntu)
+    sudo apt-get install libpcap-dev
+
     git clone https://github.com/jwilder/mongodb-tools
     cd mongodb-tools
     ./setup.sh
@@ -15,19 +25,18 @@
 
 ## Test Data Setup
 
-    In on terminal run:
+    In one terminal run:
 
     $ ./run-mongo.sh
-
 
     In another terminal run:
 
     $ python examples/testdata.py
 
 
-## collection-stats.py ##
+## collection-stats
 
-     $ ./collection-stats.py
+     $ collection-stats
 
      Checking DB: examples2.system.indexes
      Checking DB: examples2.things
@@ -56,9 +65,9 @@
      RAM Used: 2.74G (61.6%)
      Available RAM Headroom: 1.10G
 
-## index-stats.py
+## index-stats
 
-    $ ./index-stats.py
+    $ index-stats
 
 
     Checking DB: examples2.system.indexes
@@ -103,3 +112,24 @@
     RAM Headroom: 2.87G
     RAM Used: 2.73G (61.4%)
     Available RAM Headroom: 1.11G
+
+## mongo-sniff
+
+  $ mongo-sniff --live
+
+  2012-10-23T16:57:40.070932  127.0.0.1:56832 > 127.0.0.1:27017  [     admin]   db.$cmd.find({"whatsmyuri": 1}).limit(1) 0.937ms
+  2012-10-23T16:57:44.449062  127.0.0.1:56832 > 127.0.0.1:27017  [      test]   db.test.find({}) 0.191ms
+  2012-10-23T16:59:18.608794  127.0.0.1:56832 > 127.0.0.1:27017  [      test]   db.test.insert([{"_id": "5086cce6e4af576f8c3ec36f", "name": "foo"}]) 0.000ms
+  2012-10-23T16:59:18.609151  127.0.0.1:56832 > 127.0.0.1:27017  [      test]   db.$cmd.find({"getlasterror": 1.0}).limit(4294967295) 0.225ms
+  2012-10-23T16:59:21.718922  127.0.0.1:56832 > 127.0.0.1:27017  [      test]   db.test.find({}) 0.145ms
+
+  $ tcpdump -s 0 -w dump.pcap -i any
+  ...
+
+  $ mongo-sniff --file dump.pcap
+
+  2012-10-23T16:57:40.070932  127.0.0.1:56832 > 127.0.0.1:27017  [     admin]   db.$cmd.find({"whatsmyuri": 1}).limit(1) 0.937ms
+  2012-10-23T16:57:44.449062  127.0.0.1:56832 > 127.0.0.1:27017  [      test]   db.test.find({}) 0.191ms
+  2012-10-23T16:59:18.608794  127.0.0.1:56832 > 127.0.0.1:27017  [      test]   db.test.insert([{"_id": "5086cce6e4af576f8c3ec36f", "name": "foo"}]) 0.000ms
+  2012-10-23T16:59:18.609151  127.0.0.1:56832 > 127.0.0.1:27017  [      test]   db.$cmd.find({"getlasterror": 1.0}).limit(4294967295) 0.225ms
+  2012-10-23T16:59:21.718922  127.0.0.1:56832 > 127.0.0.1:27017  [      test]   db.test.find({}) 0.145ms
