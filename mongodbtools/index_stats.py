@@ -24,16 +24,17 @@ def get_collection_stats(database, collection):
 # From http://www.5dollarwhitebox.org/drupal/node/84
 def convert_bytes(bytes):
     bytes = float(bytes)
-    if bytes >= 1099511627776:
+    magnitude = abs(bytes)
+    if magnitude >= 1099511627776:
         terabytes = bytes / 1099511627776
         size = '%.2fT' % terabytes
-    elif bytes >= 1073741824:
+    elif magnitude >= 1073741824:
         gigabytes = bytes / 1073741824
         size = '%.2fG' % gigabytes
-    elif bytes >= 1048576:
+    elif magnitude >= 1048576:
         megabytes = bytes / 1048576
         size = '%.2fM' % megabytes
-    elif bytes >= 1024:
+    elif magnitude >= 1024:
         kilobytes = bytes / 1024
         size = '%.2fK' % kilobytes
     else:
