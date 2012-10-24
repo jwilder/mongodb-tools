@@ -40,13 +40,28 @@ def get_cli_options():
                       default="",
                       metavar="DATABASE",
                       help="Target database to generate statistics. All if omitted.")
+    parser.add_option("-u", "--user",
+                      dest="user",
+                      default="",
+                      metavar="USER",
+                      help="Admin username if authentication is enabled")
+    parser.add_option("--password",
+                      dest="password",
+                      default="",
+                      metavar="PASSWORD",
+                      help="Admin password if authentication is enabled")
 
     (options, args) = parser.parse_args()
 
     return options
 
-def get_connection(host, port):
-    return Connection(host, port, read_preference=ReadPreference.SECONDARY)
+def get_connection(host, port, username, password):
+    userPass = ""
+    if username and password:
+        userPass = username + ":" + password + "@"
+
+    mongoURI = "mongodb://" + userPass + host + ":" + str(port)
+    return Connection(host=mongoURI, read_preference=ReadPreference.SECONDARY)
 
 # From http://www.5dollarwhitebox.org/drupal/node/84
 def convert_bytes(bytes):
@@ -75,7 +90,7 @@ def main(options):
     }
     all_stats = []
 
-    connection = get_connection(options.host, options.port)
+    connection = get_connection(options.host, options.port, options.user, options.password)
 
     all_db_stats = {}
 
