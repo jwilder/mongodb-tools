@@ -4,6 +4,10 @@
 * index-stats.py - Displays statistics about the indexes in all databases
 * redudant-indexes.py - Finds indexes that may redundant
 
+## Dependencies
+
+    python-virtualenv
+
 ## Installation
 
     git clone https://github.com/jwilder/mongodb-tools
