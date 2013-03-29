@@ -118,13 +118,13 @@ def main(options):
             summary_stats["indexSize"] += stats.get("totalIndexSize", 0)
 
     x = PrettyTable(["Collection", "Count", "% Size", "DB Size", "Avg Obj Size", "Indexes", "Index Size"])
-    x.set_field_align("Collection", "l")
-    x.set_field_align("% Size", "r")
-    x.set_field_align("Count", "r")
-    x.set_field_align("DB Size", "r")
-    x.set_field_align("Avg Obj Size", "r")
-    x.set_field_align("Index Size", "r")
-    x.set_padding_width(1)
+    x.align["Collection"]  = "l"
+    x.align["% Size"]  = "r"
+    x.align["Count"]  = "r"
+    x.align["DB Size"]  = "r"
+    x.align["Avg Obj Size"]  = "r"
+    x.align["Index Size"]  = "r"
+    x.padding_width = 1
 
     print
 
@@ -140,7 +140,7 @@ def main(options):
                        convert_bytes(stat.get("totalIndexSize", 0))])
 
     print
-    x.printt(sortby="% Size")
+    print x.get_string(sortby="% Size")
     print "Total Documents:", summary_stats["count"]
     print "Total Data Size:", convert_bytes(summary_stats["size"])
     print "Total Index Size:", convert_bytes(summary_stats["indexSize"])
