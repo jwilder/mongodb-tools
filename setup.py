@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version='0.1'
+version='0.2'
 
 packages = find_packages(exclude=['ez_setup', 'examples', 'tests'])
 print packages
@@ -22,7 +22,7 @@ setup(
     """,
     install_requires=[
         'pymongo>=2.1',
-        'PrettyTable>=0.7.0',
+        'PrettyTable>=0.7.1',
         'psutil==0.3.0',
         'mongoengine==0.5.0'
     ],
