@@ -118,11 +118,11 @@ def main(options):
             summary_stats["indexSize"] += stats.get("totalIndexSize", 0)
 
     x = PrettyTable(["Collection", "Index","% Size", "Index Size"])
-    x.set_field_align("Collection", "l")
-    x.set_field_align("Index", "l")
-    x.set_field_align("% Size", "r")
-    x.set_field_align("Index Size", "r")
-    x.set_padding_width(1)
+    x.align["Collection"] = "l"
+    x.align["Index"] = "l"
+    x.align["% Size"] = "r"
+    x.align["Index Size"] = "r"
+    x.padding_width = 1
 
     print
 
@@ -142,21 +142,21 @@ def main(options):
 
 
     print "Index Overview"
-    x.printt(sortby="Collection")
+    print x.get_string(sortby="Collection")
 
     print
     print "Top 5 Largest Indexes"
     x = PrettyTable(["Collection", "Index","% Size", "Index Size"])
-    x.set_field_align("Collection", "l")
-    x.set_field_align("Index", "l")
-    x.set_field_align("% Size", "r")
-    x.set_field_align("Index Size", "r")
-    x.set_padding_width(1)
+    x.align["Collection"] = "l"
+    x.align["Index"] = "l"
+    x.align["% Size"] = "r"
+    x.align["Index Size"] = "r"
+    x.padding_width = 1
 
     top_five_indexes = sorted(index_size_mapping.keys(), reverse=True)[0:5]
     for size in top_five_indexes:
         x.add_row(index_size_mapping.get(size))
-    x.printt()
+    print x
     print
 
     print "Total Documents:", summary_stats["count"]
