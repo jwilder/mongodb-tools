@@ -1,8 +1,13 @@
-### mongodb-tools - Utilities for working MongoDB
+## mongodb-tools - Utilities for working with MongoDB
 
 * collection-stats.py - Display statistics about the collections in all databases
 * index-stats.py - Displays statistics about the indexes in all databases
 * redudant-indexes.py - Finds indexes that may redundant
+
+## Blogs And Articles
+
+* [Optimizing MongoDB Indexes](http://jasonwilder.com/blog/2012/02/08/optimizing-mongodb-indexes/)
+* [Design and Performance Tips for MongoDB Indexes](https://www.openshift.com/blogs/design-and-performance-tips-for-mongodb-indexes)
 
 ## Dependencies
 
