@@ -12,6 +12,7 @@
 ## Dependencies
 
     python-virtualenv
+    python-dev
 
 ## Installation
 
