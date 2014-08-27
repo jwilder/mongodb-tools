@@ -2,7 +2,7 @@
 
 * collection-stats.py - Display statistics about the collections in all databases
 * index-stats.py - Displays statistics about the indexes in all databases
-* redudant-indexes.py - Finds indexes that may redundant
+* redundant-indexes.py - Finds indexes that may be redundant
 
 ## Blogs And Articles
 
