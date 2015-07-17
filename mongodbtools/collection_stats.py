@@ -87,7 +87,8 @@ def main(options):
     summary_stats = {
         "count" : 0,
         "size" : 0,
-        "indexSize" : 0
+        "indexSize" : 0,
+        "storageSize" : 0
     }
     all_stats = []
 
@@ -116,14 +117,16 @@ def main(options):
             summary_stats["count"] += stats["count"]
             summary_stats["size"] += stats["size"]
             summary_stats["indexSize"] += stats.get("totalIndexSize", 0)
+            summary_stats["storageSize"] += stats.get("storageSize", 0)
 
-    x = PrettyTable(["Collection", "Count", "% Size", "DB Size", "Avg Obj Size", "Indexes", "Index Size"])
+    x = PrettyTable(["Collection", "Count", "% Size", "DB Size", "Avg Obj Size", "Indexes", "Index Size", "Storage Size"])
     x.align["Collection"]  = "l"
     x.align["% Size"]  = "r"
     x.align["Count"]  = "r"
     x.align["DB Size"]  = "r"
     x.align["Avg Obj Size"]  = "r"
     x.align["Index Size"]  = "r"
+    x.align["Storage Size"]  = "r"
     x.padding_width = 1
 
     print
@@ -137,13 +140,16 @@ def main(options):
                        convert_bytes(stat["size"]),
                        convert_bytes(stat.get("avgObjSize", 0)),
                        stat.get("nindexes", 0),
-                       convert_bytes(stat.get("totalIndexSize", 0))])
+                       convert_bytes(stat.get("totalIndexSize", 0)),
+                       convert_bytes(stat.get("storageSize", 0))
+                       ])
 
     print
     print x.get_string(sortby="% Size")
     print "Total Documents:", summary_stats["count"]
     print "Total Data Size:", convert_bytes(summary_stats["size"])
     print "Total Index Size:", convert_bytes(summary_stats["indexSize"])
+    print "Total Storage Size:", convert_bytes(summary_stats["storageSize"])
 
     # this is only meaningful if we're running the script on localhost
     if options.host == "localhost":
