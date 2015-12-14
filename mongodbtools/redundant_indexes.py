@@ -6,7 +6,7 @@ For example, if an index is defined on {field1:1,field2:1} and there is another 
 with just fields {field1:1}, the latter index is not needed since the first index already
 indexes the necessary fields.
 """
-from pymongo import Connection
+from pymongo import MongoClient
 from pymongo import ReadPreference
 from optparse import OptionParser
 
@@ -45,16 +45,18 @@ def get_cli_options():
 
     return options
 
-def get_connection(host, port, username, password):
+def get_client(host, port, username, password):
     userPass = ""
     if username and password:
         userPass = username + ":" + password + "@"
 
     mongoURI = "mongodb://" + userPass + host + ":" + str(port)
-    return Connection(host=mongoURI, read_preference=ReadPreference.SECONDARY)
+    client = MongoClient(mongoURI)
+    return client
+
 
 def main(options):
-    connection = get_connection(options.host, options.port, options.user, options.password)
+    client = get_client(options.host, options.port, options.user, options.password)
 
     def compute_signature(index):
         signature = index["ns"]
@@ -88,10 +90,10 @@ def main(options):
     if options.database:
         databases.append(options.database)
     else:
-        databases = connection.database_names()
+        databases = client.database_names()
 
     for db in databases:
-        report_redundant_indexes(connection[db])
+        report_redundant_indexes(client[db])
 
 if __name__ == "__main__":
     options = get_cli_options()

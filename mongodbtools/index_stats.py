@@ -7,7 +7,7 @@ collections and their indexes.
 
 from prettytable import PrettyTable
 import psutil
-from pymongo import Connection
+from pymongo import MongoClient
 from pymongo import ReadPreference
 from optparse import OptionParser
 
@@ -75,13 +75,13 @@ def get_cli_options():
 
     return options
 
-def get_connection(host, port, username, password):
+def get_client(host, port, username, password):
     userPass = ""
     if username and password:
         userPass = username + ":" + password + "@"
 
     mongoURI = "mongodb://" + userPass + host + ":" + str(port)
-    return Connection(host=mongoURI, read_preference=ReadPreference.SECONDARY)
+    return MongoClient(mongoURI)
 
 def main(options):
     summary_stats = {
@@ -91,7 +91,7 @@ def main(options):
     }
     all_stats = []
 
-    connection = get_connection(options.host, options.port, options.user, options.password)
+    client = get_client(options.host, options.port, options.user, options.password)
 
     all_db_stats = {}
 
@@ -99,14 +99,14 @@ def main(options):
     if options.database:
         databases.append(options.database)
     else:
-        databases = connection.database_names()
+        databases = client.database_names()
 
     for db in databases:
         # FIXME: Add an option to include oplog stats.
         if db == "local":
             continue
 
-        database = connection[db]
+        database = client[db]
         all_db_stats[database.name] = []
         for collection_name in database.collection_names():
             stats = get_collection_stats(database, database[collection_name])
@@ -165,10 +165,10 @@ def main(options):
 
     # this is only meaningful if we're running the script on localhost
     if options.host == "localhost":
-        ram_headroom = psutil.phymem_usage()[0] - summary_stats["indexSize"]
+        ram_headroom = psutil.virtual_memory().total - summary_stats["indexSize"]
         print "RAM Headroom:", convert_bytes(ram_headroom)
-        print "RAM Used: %s (%s%%)" % (convert_bytes(psutil.phymem_usage()[1]), psutil.phymem_usage()[3])
-        print "Available RAM Headroom:", convert_bytes((100 - psutil.phymem_usage()[3]) / 100 * ram_headroom)
+        print "RAM Used: %s (%s%%)" % (convert_bytes(psutil.virtual_memory().used), psutil.virtual_memory().percent)
+        print "Available RAM Headroom:", convert_bytes((100 - psutil.virtual_memory().percent) / 100 * ram_headroom)
 
 if __name__ == "__main__":
     options = get_cli_options()
