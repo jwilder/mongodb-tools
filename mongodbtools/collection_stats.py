@@ -61,7 +61,6 @@ def get_client(host, port, username, password):
         userPass = username + ":" + password + "@"
 
     mongoURI = "mongodb://" + userPass + host + ":" + str(port)
-    #return Connection(host=mongoURI, read_preference=ReadPreference.SECONDARY)
     client = MongoClient(mongoURI)
     return client
 
