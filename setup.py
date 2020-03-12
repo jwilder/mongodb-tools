@@ -23,7 +23,7 @@ setup(
     install_requires=[
         'pymongo>=2.1',
         'PrettyTable>=0.7.1',
-        'psutil==0.3.0',
+        'psutil==5.6.6',
         'mongoengine==0.5.0'
     ],
 )
